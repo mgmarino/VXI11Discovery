@@ -20,7 +20,6 @@ class Ports {
 };
 
 typedef std::map<std::string, Ports> AddrMap;
-typedef bool_t (*resultproc_t)(char *, struct sockaddr_in *);
 AddrMap gfFoundDevs;
 
 bool_t who_responded(struct sockaddr_in *addr) 
@@ -38,12 +37,16 @@ bool_t who_responded(struct sockaddr_in *addr)
 int main() 
 {
   enum clnt_stat clnt_stat;
-  timeval t;
   const size_t MAXSIZE = 100;
   char rcv[MAXSIZE];
+  timeval t;
   t.tv_sec = 1;
   t.tv_usec = 0;
-  clnt_stat = clnt_find_services(DEVICE_CORE, DEVICE_CORE_VERSION, 6, &t, who_responded);
+
+  // Why 6 for the protocol for the VXI-11 devices?  Not sure, but the devices
+  // will otherwise not respond. 
+  clnt_stat = clnt_find_services(DEVICE_CORE, DEVICE_CORE_VERSION, 6, &t,
+                                 who_responded);
 
   AddrMap::const_iterator iter;
   for (iter=gfFoundDevs.begin();iter!= gfFoundDevs.end();iter++) {
