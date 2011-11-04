@@ -1,0 +1,9 @@
+.depend
+*.o
+*.a
+example
+vxi11/vxi11.h
+vxi11/vxi11_clnt.c
+vxi11/vxi11_cmd
+vxi11/vxi11_svc.c
+vxi11/vxi11_xdr.c
