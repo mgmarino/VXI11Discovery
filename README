@@ -1,0 +1,62 @@
+This distribution provides code to demonstrate how one broadcasts to find
+devices with certain services.  The code was originally written to search for
+VXI11 devices, but is general to look for other devices with PROG and VERSION
+numbers.  This code provides: 
+
+
+/*
+ * The following is based on clnt_broadcast, with important differences that it
+ * is only searching for devices which have the requested services.  There is
+ * also a timeout variable which doesn't normally exist in clnt_broadcast.  If
+ * found_callback is non NULL, this function is called when a device is found
+ * with the requested service.
+ */
+clnt_find_services(uint32_t prog, uint32_t vers, uint32_t proc, 
+                   struct timeval *t, resultfoundproc_t found_callback);
+
+
+which is based on Apple's open source clnt_broadcast available in
+rpc.subproj/pmap_rmt.c at:
+
+http://www.opensource.apple.com/source/Libinfo/Libinfo-324/rpc.subproj/ 
+
+Because of this the two files:
+
+clnt_find_services.h clnt_find_services.c
+
+are subject to the open-source license specified in those files.  There is an additional file:
+
+example.cc 
+
+which searches a local subnet and outputs information on the VXI11 devices
+connected.  This file is released under GPL 3.0 license meaning you can use it
+for whatever (including inspiration).
+
+In vxi11 is a (patched version) of Steve Sharples VXI11 ethernet protocol
+library, availble at:
+
+http://optics.eee.nottingham.ac.uk/vxi11/
+
+This code has been patched to work on Mac OS X systems and example.cc uses this
+code to communicate directly with VXI11 devices.  
+
+For install:
+
+> make
+> ./example
+Example output:
+ Found: 192.168.1.29 : TCP 1024; UDP 0
+  Output: Agilent Technologies,33220A,MY44036260,2.02-2.02-22-2
+
+ Found: 192.168.1.30 : TCP 1024; UDP 0
+  Output: THURLBY THANDAR, CPX400DP,  355211, 1.01 - 3.00
+
+Compatibility:  At the moment, this *only* works on Mac OS X, but it shouldn't
+take much to recover linux compatibility.  I just haven't yet had time.
+
+Contact me with suggestions, patches, at: 
+mmarino+github@gmail.com
+or just submit a pull request!
+
+Mike Marino November 2011
+
