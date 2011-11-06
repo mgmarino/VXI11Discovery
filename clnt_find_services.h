@@ -83,7 +83,7 @@ typedef bool_t (*resultfoundproc_t)(struct sockaddr_in *);
  * with the requested service.
  */
 enum clnt_stat 
-#ifdef __LP64__
+#if (defined __LP64__) && (defined __APPLE__)
 clnt_find_services(uint32_t prog, uint32_t vers, uint32_t proc, 
 #else
 clnt_find_services(u_long prog, u_long vers, u_long proc, 

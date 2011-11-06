@@ -51,8 +51,7 @@ Example output:
  Found: 192.168.1.30 : TCP 1024; UDP 0
   Output: THURLBY THANDAR, CPX400DP,  355211, 1.01 - 3.00
 
-Compatibility:  At the moment, this *only* works on Mac OS X, but it shouldn't
-take much to recover linux compatibility.  I just haven't yet had time.
+Compatibility: This has been tested on Mac OS X systems (Lion) and on Ubuntu. 
 
 Contact me with suggestions, patches, at: 
 mmarino+github@gmail.com

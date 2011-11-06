@@ -93,11 +93,17 @@ getbroadcastnets(struct in_addr *addrs, int sock, char *buf)
                 perror("broadcast: ioctl (get interface configuration)");
                 return (0);
         }
+#if defined __APPLE__ /* This should really be BSD */
 #define max(a, b) (a > b ? a : b)
 #define size(p)	max((p).sa_len, sizeof(p))
+#endif
 	cplim = buf + ifc.ifc_len; /*skip over if's with big ifr_addr's */
 	for (cp = buf; cp < cplim;
+#if defined __APPLE__ /* This should really be BSD */
 			cp += sizeof (ifr->ifr_name) + size(ifr->ifr_addr)) {
+#else
+			cp += sizeof (*ifr)) {
+#endif
 		ifr = (struct ifreq *)cp;
 		if (ifr->ifr_addr.sa_family != AF_INET)
 			continue;
@@ -129,7 +135,7 @@ getbroadcastnets(struct in_addr *addrs, int sock, char *buf)
 
 
 enum clnt_stat 
-#ifdef __LP64__
+#if (defined __LP64__) && (defined __APPLE__) /* 64-bit APPLE machines */
 clnt_find_services(uint32_t prog, uint32_t vers, uint32_t proc, 
 #else
 clnt_find_services(u_long prog, u_long vers, u_long proc, 
@@ -148,7 +154,7 @@ clnt_find_services(u_long prog, u_long vers, u_long proc,
 	register int i;
 	bool_t done = FALSE;
 	uint32_t xid;
-#ifdef __LP64__
+#if (defined __LP64__) && (defined __APPLE__)
 	unsigned int port;
 #else
 	unsigned long port;
@@ -270,7 +276,7 @@ try_again:
 		stat = RPC_CANTRECV;
 		goto done_broad;
 	}
-#ifdef __LP64__
+#if (defined __LP64__) && (defined __APPLE__)
 	if (inlen < (int)sizeof(uint32_t))
 		goto recv_again;
 #else
